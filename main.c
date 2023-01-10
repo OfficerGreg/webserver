@@ -2,24 +2,30 @@
 #include <sys/socket.h>
 #include <stdio.h>
 
-struct sockaddr_in{
-	sa_family_t	sin_family;	//address family: AF_INET
-	in_port_t	sin_port;	//port in network byte order
-	struct in_addr	sin_addr;	//internet address
-}
-
-struct in_addr{
-	uint32_t	s_addr;
-}
 
 int main(){
-
+	//socket
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sockfd == -1){
 		perror("webserver (socket)");
 		return 1;
 	}
 	printf("socket was created successfully\n");
+
+	//bind
+	struct sockaddr_in host_addr;
+	int host_addrlen = sizeof(host_addr);
+
+	host_addr.sin_family		=	F_INET;
+	host_addr.sin_port		=	htons(PORT);
+	host_addr.sin_addr.s_addr	=	htonl(INADDR_ANY);
+
+	if(bind(sockfd,(struct sockaddr*)&host_addr, host_addrlen) != 0){
+		perror("webserver (bind)");
+		return 1;
+	}
+	prinf("socket successfully bound to address\n");
+
 
 	return 0;
 }
