@@ -5,8 +5,8 @@
 
 int main(){
 	//socket
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if(sockfd == -1){
+	int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+	if(server_socket == -1){
 		perror("webserver (socket)");
 		return 1;
 	}
@@ -16,11 +16,11 @@ int main(){
 	struct sockaddr_in host_addr;
 	int host_addrlen = sizeof(host_addr);
 
-	host_addr.sin_family		=	F_INET;
+	host_addr.sin_family		=	AF_INET;
 	host_addr.sin_port		=	htons(PORT);
 	host_addr.sin_addr.s_addr	=	htonl(INADDR_ANY);
 
-	if(bind(sockfd,(struct sockaddr*)&host_addr, host_addrlen) != 0){
+	if(bind(server_socket,(struct sockaddr*)&host_addr, host_addrlen) != 0){
 		perror("webserver (bind)");
 		return 1;
 	}
