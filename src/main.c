@@ -1,9 +1,11 @@
+#include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <sys/socket.h>
 #include <stdio.h>
 
+#define BUFFER_SIZE 1024
 
 int main(){
 
@@ -23,6 +25,13 @@ int main(){
 	void reset(){
 		printf("\033[0m");
 	}
+
+	char buffer[BUFFER_SIZE];
+	char resp[] 	= 	"HTTP/1.0 200 OK\r\n"
+				"Server: webserver-c\r\n"
+				"Content-type: text/html\r\n\r\n"
+				"<html>hello, world!</html>\r\n";
+
 	red();
 	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	printf("\n     Simple Webserver     \n");
@@ -84,6 +93,20 @@ int main(){
 		printf("connection established!");
 
 		
+		int read_value = read(new_server_socket, buffer, BUFFER_SIZE);
+		if(read_value < 0){
+			red();
+			perror("webserver (read)");
+			continue;
+		}
+
+		int write_value = write(new_server_socket, resp, strlen(resp));
+		if(write_value < 0){
+			red();
+			perror("webserver (write)");
+			continue;
+		}
+
 		close(new_server_socket);
 	}
 
