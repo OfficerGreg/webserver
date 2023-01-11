@@ -24,7 +24,9 @@ int main(){
 		printf("\033[0m");
 	}
 	red();
-	printf("\n\n~~~~~~~~~~SOCKET SNIFFER 9000~~~~~~~~~~~\n\n");
+	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	printf("\n     Simple Webserver     \n");
+	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	reset();
 
 	//socket
@@ -36,7 +38,7 @@ int main(){
 	}
 
 	green();
-	printf("socket was created successfully\n");
+	printf("\nsocket was created successfully\n");
 	reset();
 
 	
