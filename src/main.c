@@ -1,9 +1,10 @@
-#include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <sys/socket.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1024
 
@@ -26,11 +27,28 @@ int main(){
 		printf("\033[0m");
 	}
 
-	char buffer[BUFFER_SIZE];
-	char resp[] 	= 	"HTTP/1.0 200 OK\r\n"
-				"Server: webserver-c\r\n"
-				"Content-type: text/html\r\n\r\n"
-				"<html>hello, world!</html>\r\n";
+
+	FILE *file = fopen("./src/index.html", "r");
+	char *resp;
+	long size;
+
+	if(file == NULL){
+		red();
+		perror("could not open file!\n");
+		return 1;
+	}
+	
+	fseek(file, 0, SEEK_END);	
+	size = ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+	resp = malloc(sizeof(char) * (size + 1));
+
+	fread(resp, size, 1, file);
+	fclose(file);
+
+//	printf("%s", resp);
+
 
 	red();
 	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
@@ -52,15 +70,36 @@ int main(){
 
 	
 	//bind
-	uint16_t PORT;
+	uint16_t	PORT;
+
 	printf("\nPlease enter the server port: ");
 	scanf("%hi", &PORT);
+
+
+
+	
+	char buffer[BUFFER_SIZE];
+
+	char http_header[BUFFER_SIZE]	=	"HTTP/1.1 200 OK\r\n"
+                  				"Server: webserver-c\r\n"
+                  				"Content-type: text/html\r\n\r\n";
+
+	strcat(http_header, resp);
+//	strcat(http_header, "\r\n");
+
+//	printf("%s", http_header);	
+
+
+
 	struct sockaddr_in host_addr;
 	int host_addrlen = sizeof(host_addr);
 
 	host_addr.sin_family		=	AF_INET;
 	host_addr.sin_port		=	htons(PORT);
 	host_addr.sin_addr.s_addr	=	htonl(INADDR_ANY);
+
+	struct sockaddr_in client_addr;
+	int client_addrlen = sizeof(client_addr);
 
 	if(bind(server_socket,(struct sockaddr*)&host_addr, host_addrlen) != 0){
 		red();		
@@ -77,7 +116,7 @@ int main(){
 		return 1;
 	}
 	reset();	
-	printf("\nserver is listening for incoming connections on port %i\n", PORT);
+	printf("\nserver is listening for incoming connections on port %i\n\n", PORT);
 
 	for(;;){
 
@@ -92,6 +131,14 @@ int main(){
 		green();
 		printf("connection established!");
 
+		int sockn = getsockname(new_server_socket, (struct sockaddr*)&client_addr, (socklen_t*)&client_addrlen);
+
+		if(sockn < 0){
+			red();
+			perror("webserver (getsocketname");
+			continue;
+		}
+		
 		
 		int read_value = read(new_server_socket, buffer, BUFFER_SIZE);
 		if(read_value < 0){
@@ -100,7 +147,12 @@ int main(){
 			continue;
 		}
 
-		int write_value = write(new_server_socket, resp, strlen(resp));
+		char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];
+		sscanf(buffer, "%s %s %s", method, uri, version);
+		printf("[%s:%u] %s %s %s\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), method ,version, uri);
+		
+
+		int write_value = write(new_server_socket, http_header, strlen(http_header));
 		if(write_value < 0){
 			red();
 			perror("webserver (write)");
