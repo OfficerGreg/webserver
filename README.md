@@ -22,3 +22,7 @@
   - When running the project a port has to be choosen, for example port: **3000**
   - the path and content of the index.html file can be edited, changed as you wish
   
+## To do:
+  - Add routing
+  - Code cleanup
+  - divide code into *.c, *.h
