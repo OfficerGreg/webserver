@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUFFER_SIZE 1024
+int BUFFER_SIZE = 1024;
 
 int main(){
 
@@ -50,10 +50,10 @@ int main(){
 //	printf("%s", resp);
 
 
-	red();
+
 	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	printf("\n     Simple Webserver     \n");
-	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 	reset();
 
 	//socket
@@ -75,14 +75,16 @@ int main(){
 	printf("\nPlease enter the server port: ");
 	scanf("%hi", &PORT);
 
-
-
+	printf("\nEnter the Buffer Size: ");
+	scanf("%i", &BUFFER_SIZE);
 	
 	char buffer[BUFFER_SIZE];
 
-	char http_header[BUFFER_SIZE]	=	"HTTP/1.1 200 OK\r\n"
-                  				"Server: webserver-c\r\n"
-                  				"Content-type: text/html\r\n\r\n";
+	char http_header[BUFFER_SIZE];
+
+	strncpy(http_header, "HTTP/1.1 200 OK\r\nServer: webserver-c\r\nContent-type: text/html\r\n\r\n", BUFFER_SIZE);
+        //"Server: webserver-c\r\n"
+        //"Content-type: text/html\r\n\r\n";
 
 	strcat(http_header, resp);
 //	strcat(http_header, "\r\n");
