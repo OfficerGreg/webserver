@@ -2,8 +2,9 @@
 
 ### A simple webserver written in c
 
-![image](https://user-images.githubusercontent.com/73076485/211869570-7f513a8c-e21a-4196-9c05-6b6c9a0e2706.png) ![image](https://user-images.githubusercontent.com/73076485/211869733-3536d3d2-4acc-441e-9d25-26edb5b2db4d.png)
+![terminal](https://user-images.githubusercontent.com/73076485/212486436-5f23658c-29e0-46be-af87-d6fa2e66bdca.png)
 
+![browser](https://user-images.githubusercontent.com/73076485/212486337-2646e636-0a96-414e-8057-1b9cd33b0577.png)
 
 
 
