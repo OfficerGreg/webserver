@@ -30,6 +30,7 @@ int main(){
 	printf("Simple Webserver written in C\n");
 
 	char path[100];
+	yellow();
 	printf("Enter file path: ");
 	scanf("%s", path);
 
@@ -71,12 +72,13 @@ int main(){
 	
 	//bind
 	uint16_t	PORT;
-
+	yellow();
 	printf("\nPlease enter the server port: ");
 	scanf("%hi", &PORT);
 
 	printf("\nEnter the Buffer Size: ");
 	scanf("%i", &BUFFER_SIZE);
+	reset();
 	
 	char buffer[BUFFER_SIZE];
 
