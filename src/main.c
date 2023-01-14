@@ -27,10 +27,16 @@ int main(){
 		printf("\033[0m");
 	}
 
+	printf("Simple Webserver written in C\n");
 
-	FILE *file = fopen("./src/index.html", "r");
+	char path[100];
+	printf("Enter file path: ");
+	scanf("%s", path);
+
+	FILE *file = fopen(path, "r");
 	char *resp;
 	long size;
+
 
 	if(file == NULL){
 		red();
@@ -49,12 +55,6 @@ int main(){
 
 //	printf("%s", resp);
 
-
-
-	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-	printf("\n     Simple Webserver     \n");
-	printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
-	reset();
 
 	//socket
 	int server_socket = socket(AF_INET, SOCK_STREAM, 0);
